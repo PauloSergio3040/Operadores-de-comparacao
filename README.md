@@ -1,99 +1,110 @@
-# Paulo Brito
- 
- **`Desenvolvedor Back End`**
+# ⚖️ Script SQL - Operadores de Comparação e Lógicos (MySQL)
+
+Este script demonstra o uso dos **principais operadores de comparação e lógicos** em consultas SQL, aplicados sobre uma tabela chamada `senso`.  
+Os exemplos simulam cenários reais de análise de dados populacionais, permitindo compreender a sintaxe e a lógica por trás de filtros e condições no MySQL.
+
+---
+
+## 🎯 Objetivo
+Ensinar como aplicar **condições e comparações** dentro de comandos `SELECT` utilizando operadores como  
+`=`, `>`, `<`, `<>`, `>=`, `<=`, `like`, `in`, `is null`, `is not null`, `and`, `or` e `having`. 
+
+---
+
+## 🧱 Estrutura Base
+
+O script parte de:
+
+use curso;
+select * from senso;
+A tabela senso contém informações de municípios, populações, estados (cod_uf, estado, nome_mun) e ano do censo.
+
+⚙️ Operadores Demonstrados
+🔹 Igual (=)
+Filtra registros com valores idênticos:
+
+select * from senso
+where cod_uf = '35'
+and ano = '2014';
+🔹 Maior (>) e Menor (<)
+Seleciona cidades acima ou abaixo de determinado número de habitantes:
+
+select * from senso
+where populacao > 100000
+and ano = '2014';
+🔹 Menor ou Igual (<=)
+
+select * from senso
+where populacao <= 10000
+and ano = '2014';
+🔹 Diferente (<>)
+Exclui determinados valores:
+
+select * from senso
+where cod_uf <> '35'
+and cod_uf <> '14';
+🔹 Operador OR e IN
+Duas formas de combinar condições:
+
+select * from senso
+where nome_mun like ('A%')
+and (cod_uf = '35' or cod_uf = '15');
+
+-- Jeito mais limpo:
+select * from senso
+where nome_mun like ('A%')
+and cod_uf in ('35', '15');
+🔹 Intervalos (combinação de operadores)
+
+select * from senso
+where populacao <= 100000
+  and populacao >= 50000
+  and cod_uf = '35'
+  and nome_mun <> 'Vinhedo'
+  and ano = '2014';
+🧩 Operadores de Nulidade
+🔸 is not null
+Seleciona registros onde o campo tem valor:
+
+select * from senso
+where regiao is not null;
+🔸 is null
+Seleciona registros com valor nulo:
 
 
-Eu me chamo Paulo Sergio Brito Viana, atuo na área de Tecnologia da Informação, com formação técnica em Desenvolvimento de Sistemas pela ETEC H.A.S. e atualmente cursando o tecnólogo em Banco de Dados. Tenho como meta me especializar como Administrador de Banco de Dados (DBA), unindo conhecimentos de modelagem, segurança, otimização e infraestrutura de dados.
+select * from senso
+where regiao is null;
+🔸 Cenário de atualização
+Demonstra como converter valores vazios em null e vice-versa:
 
-Estou aprofundando meus estudos em SQL e suas variações (MySQL, SQL Server, Oracle e NoSQL), com foco na certificação Oracle Certified Associate (OCA). Busco constantemente aprimorar minhas habilidades técnicas e analíticas para atuar na construção e manutenção de ambientes de dados eficientes, seguros e escaláveis.
+set sql_safe_updates = 0;
+update senso set regiao = null where regiao = '';
+set sql_safe_updates = 1;
 
-<p align="left">
-        <img 
-            alt="Discord" 
-            title="Discord:blackknight8807" 
-            src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white"
-        />
-    </a>
-    <a href="https://www.instagram.com/paulo.brito3939?igsh=MXkzN2ozbHR2OHk1">
-        <img 
-            alt="IG" 
-            title="Meu instagram" 
-            src="https://img.shields.io/badge/Instagram-E4405F?style=for-the-badge&logo=instagram&logoColor=white"
-        />
-    </a> 
-    <a href="https://github.com/PauloSergio3040?tab=repositories&sort=stargazers">
-        <img 
-            alt="Total de estrelas" 
-            title="Total de estrelas GitHub" 
-            src="https://custom-icon-badges.demolab.com/github/stars/PauloSergio3040?color=55960c&style=for-the-badge&labelColor=488207&logo=star&label=estrelas"
-        />
-    </a>
-    <a href="https://github.com/PauloSergio3040?tab=followers">
-        <img 
-            alt="Seguidores" 
-            title="Me siga no GitHub" 
-            src="https://custom-icon-badges.demolab.com/github/followers/PauloSergio3040?color=236ad3&labelColor=1155ba&style=for-the-badge&logo=github&label=Seguidores&logoColor=white"
-        />
-    </a>
-</p>
+set sql_safe_updates = 0;
+update senso set regiao = '' where regiao is null;
+set sql_safe_updates = 1;
+📊 Operador HAVING
+Usado junto ao GROUP BY para aplicar condições em agregações:
 
-### 🤖 Linguagens e Tecnologias
+select cod_uf, estado, count(*) qtd
+from senso
+where ano = '2014'
+group by cod_uf, estado
+having count(cod_mun) > 500;
+Outros exemplos:
 
-<img 
-    align="left" 
-    alt="HTML5"
-    title="HTML5" 
-    width="30px" 
-    style="padding-right: 10px;" 
-    img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/html5/html5-original.svg"
-/>
+having count(cod_mun) < 500;
 
-<img 
-    align="left" 
-    alt="CSS3"
-    title="CSS3" 
-    width="30px" 
-    style="padding-right: 10px;" 
-    src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/css3/css3-original.svg" 
-/>
-          
+having sum(populacao) > 5000000;
 
-<img 
-    align="left" 
-    alt="JS"
-    title="JS" 
-    width="30px" 
-    style="padding-right: 10px;" 
-    img src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/javascript/javascript-original.svg" 
-/>
-          
-<img 
-    align="left" 
-    alt="MySql"
-    title="MySql" 
-    width="30px" 
-    style="padding-right: 10px;" 
-    src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/mysql/mysql-original.svg" 
-/>
+📚 Conceitos Reforçados
+Uso correto de comparadores (=, <>, <, >, <=, >=)
 
-<img 
-    align="left" 
-    alt="Sqlite"
-    title="Sqlite" 
-    width="30px" 
-    style="padding-right: 10px;" 
-    src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/sqlite/sqlite-original.svg" 
-/>
+Combinação de condições com AND, OR e IN
 
+Filtragem com LIKE e curingas (A%)
 
-<img 
-    align="left" 
-    alt="Postgree"
-    title="Postgree" 
-    width="30px" 
-    style="padding-right: 10px;" 
-    src="https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/postgresql/postgresql-original-wordmark.svg"
-/>
+Controle de valores nulos e vazios
 
-<BR/>
-<BR/>
+Agregações com GROUP BY e HAVING
